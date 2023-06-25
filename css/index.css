@@ -1,0 +1,228 @@
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+}
+
+p {
+    display: block;
+    text-indent: justify;
+    margin-block-start: 0;
+    margin-block-end: 0.5em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+#header{
+    transform: translateY(-100%);
+    transition: transform 0.5s ease;
+}
+
+#header.visible {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    width: 100vw;
+    position: fixed;
+    max-width: 100%;
+    backdrop-filter: blur(12px);
+    z-index: 10;
+    transform: translateY(0);
+}
+
+#header #buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 15em;
+    padding-right: 2em;
+}
+
+#header #buttons button{
+    border: none;
+    background-color: #fdfdfd00;
+    cursor: pointer;
+}
+
+#logoHeader{
+    cursor: pointer;
+}
+
+#logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+    opacity: 1;
+    transition: background 1s ease-in-out;
+    gap: 2em;
+    transform: translateY(-8.5%);
+}
+
+#logo #buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 15em;
+}
+
+#logo #buttons button{
+    font-size: 1em;
+    background-color: #fdfdfd22;
+    backdrop-filter: blur(12px);
+    border-color: #000;
+    border-width: 1px;
+    height: 100%;
+    padding: 1em;
+    width: 100%;
+    cursor: pointer;
+}
+
+#logo img{
+    height: 20em;
+}
+
+#logo.fade-out ::backdrop{
+    opacity: 0;
+}
+
+#projetos {
+    align-items: center;
+    display: flex;
+    gap: 4em;
+    height: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 10em 2em;
+}
+
+#projetos .card {
+    background-color: #fdfdfd;
+    border-color: #aaa;
+    border-style: solid;
+    justify-content: space-between;
+    gap: 2em;
+    padding: 1em;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 40%;
+}
+
+#projetos .card img{
+    border-radius: 1em;
+}
+
+#projetos .card span{
+    text-indent: justify;
+}
+
+.fot {
+    margin: 0 auto;
+}
+
+.fot img{
+    height: 15em;
+    width: 30em;
+    object-fit: cover;
+}
+
+
+#contato{
+    padding: 10em 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+#contato .card {
+    background-color: #fdfdfd;
+    border-color: #aaa;
+    border-style: solid;
+    justify-content: space-between;
+    gap: 2em;
+    width: 15em;
+    padding: 1em;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+#contato .card::after {
+    z-index: -1;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+#contato .card:hover{
+    transform: scale(1.2, 1.2);
+}
+
+#contato .card:hover::after{
+    opacity: 1;
+}
+
+#sobre .card {
+    background-color: #fdfdfd;
+    border-color: #aaa;
+    border-style: solid;
+    justify-content: space-between;
+    gap: 0;
+    padding: 1em;
+    border-radius: 1em;
+    max-width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#sobre{
+    display: flex;
+    justify-content: center;
+    padding: 2em;
+}
+
+
+@media (max-width: 767px) {
+    #logo img{
+        width:  80vw;
+    }
+
+    #header.visible{
+        flex-direction: column;
+        align-items: center;
+        padding: 1em 0;
+    }
+    #header #buttons{
+       padding-right: 0;
+    }
+
+    #header.visible {
+       
+    }
+
+    #projetos .card {
+        background-color: #fdfdfd;
+        border-color: #aaa;
+        border-style: solid;
+        justify-content: space-between;
+        gap: 2em;
+        padding: 1em;
+        border-radius: 1em;
+        display: flex;
+        max-width: 80%;
+    }
+}
