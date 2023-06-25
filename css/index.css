@@ -68,7 +68,7 @@ p {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 15em;
+    width: 20em;
 }
 
 #logo #buttons button{
@@ -210,8 +210,10 @@ p {
        padding-right: 0;
     }
 
-    #header.visible {
-       
+    .fot img{
+        height: 15em;
+        width: 15em;
+        object-fit: cover;
     }
 
     #projetos .card {
