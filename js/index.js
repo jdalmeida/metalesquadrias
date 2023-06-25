@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
     var imagens = [
-      "/1.jpg",
-      "/2.jpg",
-      "/3.jpg",
-      "/4.jpg",
-      "/5.jpg",
-      "/6.jpg",
-      "/7.jpg"
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/1.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/2.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/3.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/4.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/5.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/6.jpg",
+      "https://cocacolacomvodka.github.io/metalesquadrias/public/7.jpg",
     ];
     
     var div = document.getElementById("logo");
