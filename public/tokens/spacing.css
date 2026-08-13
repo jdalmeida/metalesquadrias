@@ -1,0 +1,44 @@
+/* Metal Esquadrias — Spacing, radius, shadow, layout tokens */
+:root {
+  /* Spacing (4px base) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* Radius — restrained, industrial. Square-ish with a small honest round. */
+  --radius-none: 0;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  /* Borders — this brand leans on borders more than shadows (blueprint feel) */
+  --border-width: 1px; /* @kind spacing */
+  --border-width-strong: 2px; /* @kind spacing */
+
+  /* Shadows — subtle, cool-grey; no bluish glow */
+  --shadow-sm: 0 1px 2px rgba(18,20,23,0.06);
+  --shadow-md: 0 2px 6px rgba(18,20,23,0.08), 0 1px 2px rgba(18,20,23,0.06);
+  --shadow-lg: 0 10px 28px rgba(18,20,23,0.12);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.6);
+
+  /* Layout */
+  --container-max: 1200px; /* @kind spacing */
+  --container-narrow: 760px; /* @kind spacing */
+  --header-h: 76px; /* @kind spacing */
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --dur-fast: 120ms; /* @kind other */
+  --dur-med: 200ms; /* @kind other */
+  --dur-slow: 320ms; /* @kind other */
+}

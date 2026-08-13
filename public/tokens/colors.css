@@ -1,0 +1,77 @@
+/* Metal Esquadrias — Color tokens
+   Brand red #B60000 (from logo) + an iron/steel neutral family + warm paper.
+   A serralheria: color is disciplined — red is the mark, everything else is metal and paper. */
+:root {
+  /* Brand red — the mark */
+  --red-900: #6E0000;
+  --red-800: #8F0000;
+  --red-700: #B60000; /* primary — logo red */
+  --red-600: #D01414;
+  --red-500: #E23A2E;
+  --red-100: #F7DBD8;
+  --red-050: #FCEEEC;
+
+  /* Iron / steel neutrals (warm-cool graphite) */
+  --iron-950: #121417; /* ink */
+  --iron-900: #16181A;
+  --iron-800: #22262B;
+  --iron-700: #2E333A;
+  --iron-600: #454C55;
+  --iron-500: #5B636D;
+  --iron-400: #838B94;
+  --iron-300: #AEB4BB;
+  --iron-200: #CDD1D6;
+  --iron-150: #DDE0E4;
+  --iron-100: #E9EBEE;
+  --iron-050: #F1F2F4;
+
+  /* Warm paper (off-white base — not clinical white) */
+  --paper: #F6F5F2;
+  --paper-dim: #EEEDE8;
+  --white: #FFFFFF;
+
+  /* Semantic */
+  --green-600: #1E7A46;
+  --green-100: #DCEFE2;
+  --amber-600: #B4790A;
+  --amber-100: #F7E9C6;
+  --blue-600: #24597A;   /* steel blue — info */
+  --blue-100: #D9E6EE;
+
+  /* ---- Semantic aliases ---- */
+  --color-primary: var(--red-700);
+  --color-primary-hover: var(--red-800);
+  --color-primary-active: var(--red-900);
+  --color-on-primary: var(--white);
+
+  --text-strong: var(--iron-950);
+  --text-body: var(--iron-800);
+  --text-muted: var(--iron-500);
+  --text-faint: var(--iron-400);
+  --text-on-dark: var(--paper);
+  --text-on-dark-muted: var(--iron-300);
+  --text-link: var(--red-700);
+  --text-link-hover: var(--red-800);
+
+  --surface-page: var(--paper);
+  --surface-card: var(--white);
+  --surface-sunken: var(--paper-dim);
+  --surface-dark: var(--iron-900);
+  --surface-dark-2: var(--iron-800);
+
+  --border-subtle: var(--iron-150);
+  --border-default: var(--iron-200);
+  --border-strong: var(--iron-400);
+  --border-on-dark: rgba(255,255,255,0.12);
+
+  --focus-ring: var(--red-500);
+
+  --success: var(--green-600);
+  --success-surface: var(--green-100);
+  --warning: var(--amber-600);
+  --warning-surface: var(--amber-100);
+  --danger: var(--red-700);
+  --danger-surface: var(--red-050);
+  --info: var(--blue-600);
+  --info-surface: var(--blue-100);
+}

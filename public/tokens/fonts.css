@@ -1,0 +1,5 @@
+/* Metal Esquadrias — webfonts
+   Display/headings: Archivo (nearest Google Fonts match to the custom logo wordmark — SUBSTITUTION, flagged in readme.md)
+   Body/UI: IBM Plex Sans
+   Specs/measurements: IBM Plex Mono */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
