@@ -2,11 +2,12 @@ import { usePostHog } from "@posthog/react";
 import { MessageCircle } from "lucide-react";
 import { NAP, WHATSAPP_MESSAGES, whatsappHref } from "#/lib/site";
 
+// ponytail: âncoras absolutas — as seções vivem na home, o header aparece em todas as páginas
 const NAV_LINKS = [
-	{ href: "#servicos", label: "Serviços" },
-	{ href: "#trabalhos", label: "Trabalhos" },
-	{ href: "#sobre", label: "Sobre" },
-	{ href: "#faq", label: "Perguntas" },
+	{ href: "/#servicos", label: "Serviços" },
+	{ href: "/#trabalhos", label: "Trabalhos" },
+	{ href: "/#sobre", label: "Sobre" },
+	{ href: "/#faq", label: "Perguntas" },
 ];
 
 export function Header() {
@@ -15,7 +16,7 @@ export function Header() {
 	return (
 		<header className="sticky top-0 z-50 border-b border-border-subtle bg-background/90 backdrop-blur">
 			<div className="page-wrap flex h-[var(--header-h)] items-center justify-between gap-3 sm:gap-6">
-				<a href="#top" className="shrink-0">
+				<a href="/#top" className="shrink-0">
 					<img
 						src="/assets/logo-horizontal.svg"
 						alt="Metal Esquadrias"
