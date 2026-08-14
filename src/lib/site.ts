@@ -1,5 +1,7 @@
 export const WHATSAPP_NUMBER = "5551998493450";
 
+export const SITE_URL = "https://www.metalesquadrias.com.br";
+
 export const NAP = {
 	name: "Metal Esquadrias",
 	street: "R. Ver. Rudi Müler, 101",
@@ -34,4 +36,10 @@ export const WHATSAPP_MESSAGES = {
 		"Olá, vim pelo site da Metal Esquadrias e quero pedir um orçamento de grade ou sacada.",
 	estruturas:
 		"Olá, vim pelo site da Metal Esquadrias e quero pedir um orçamento de pergolado ou estrutura.",
+	paraArquitetos:
+		"Olá, vim pela página para arquitetos e quero enviar um projeto para orçamento.",
+	paraConstrutoras:
+		"Olá, vim pela página para construtoras e quero enviar um projeto para orçamento.",
+	casaEComercio:
+		"Olá, vim pela página para casa e comércio e quero pedir um orçamento. Posso enviar uma foto e a medida aproximada?",
 } as const;

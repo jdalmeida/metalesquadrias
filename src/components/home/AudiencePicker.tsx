@@ -2,9 +2,13 @@ import { usePostHog } from "@posthog/react";
 import { Building2, HardHat, Wrench } from "lucide-react";
 
 const AUDIENCES = [
-	{ icon: HardHat, label: "Sou arquiteto" },
-	{ icon: Building2, label: "Represento uma construtora" },
-	{ icon: Wrench, label: "Preciso de serralheria" },
+	{ icon: HardHat, label: "Sou arquiteto", href: "/para-arquitetos" },
+	{
+		icon: Building2,
+		label: "Represento uma construtora",
+		href: "/para-construtoras",
+	},
+	{ icon: Wrench, label: "Preciso de serralheria", href: "/casa-e-comercio" },
 ];
 
 export function AudiencePicker() {
@@ -21,11 +25,13 @@ export function AudiencePicker() {
 					mostra o serviço certo.
 				</p>
 				<div className="mt-8 grid gap-4 sm:grid-cols-3">
-					{AUDIENCES.map(({ icon: Icon, label }) => (
+					{AUDIENCES.map(({ icon: Icon, label, href }) => (
 						<a
 							key={label}
-							href="#servicos"
-							onClick={() => posthog.capture("audience_selected", { audience: label })}
+							href={href}
+							onClick={() =>
+								posthog.capture("audience_selected", { audience: label })
+							}
 							className="group flex items-center gap-3 rounded-lg border border-border-on-dark bg-dark-2 p-5 transition-colors hover:border-primary"
 						>
 							<Icon className="size-5 shrink-0 text-primary" />

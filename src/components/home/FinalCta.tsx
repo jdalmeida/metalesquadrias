@@ -2,7 +2,13 @@ import { usePostHog } from "@posthog/react";
 import { MessageCircle } from "lucide-react";
 import { WHATSAPP_MESSAGES, whatsappHref } from "#/lib/site";
 
-export function FinalCta() {
+export function FinalCta({
+	message = WHATSAPP_MESSAGES.home,
+	placement = "final_cta",
+}: {
+	message?: string;
+	placement?: string;
+}) {
 	const posthog = usePostHog();
 
 	return (
@@ -18,10 +24,10 @@ export function FinalCta() {
 					</p>
 				</div>
 				<a
-					href={whatsappHref(WHATSAPP_MESSAGES.home)}
+					href={whatsappHref(message)}
 					onClick={() =>
 						posthog.capture("whatsapp_quote_requested", {
-							placement: "final_cta",
+							placement,
 						})
 					}
 					target="_blank"

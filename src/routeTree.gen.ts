@@ -10,33 +10,69 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CasaEComercioRouteImport } from './routes/casa-e-comercio'
+import { Route as ParaArquitetosRouteImport } from './routes/para-arquitetos'
+import { Route as ParaConstrutorasRouteImport } from './routes/para-construtoras'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CasaEComercioRoute = CasaEComercioRouteImport.update({
+  id: '/casa-e-comercio',
+  path: '/casa-e-comercio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaArquitetosRoute = ParaArquitetosRouteImport.update({
+  id: '/para-arquitetos',
+  path: '/para-arquitetos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaConstrutorasRoute = ParaConstrutorasRouteImport.update({
+  id: '/para-construtoras',
+  path: '/para-construtoras',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/casa-e-comercio': typeof CasaEComercioRoute
+  '/para-arquitetos': typeof ParaArquitetosRoute
+  '/para-construtoras': typeof ParaConstrutorasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/casa-e-comercio': typeof CasaEComercioRoute
+  '/para-arquitetos': typeof ParaArquitetosRoute
+  '/para-construtoras': typeof ParaConstrutorasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/casa-e-comercio': typeof CasaEComercioRoute
+  '/para-arquitetos': typeof ParaArquitetosRoute
+  '/para-construtoras': typeof ParaConstrutorasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/casa-e-comercio' | '/para-arquitetos' | '/para-construtoras'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/casa-e-comercio' | '/para-arquitetos' | '/para-construtoras'
+  id:
+    | '__root__'
+    | '/'
+    | '/casa-e-comercio'
+    | '/para-arquitetos'
+    | '/para-construtoras'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CasaEComercioRoute: typeof CasaEComercioRoute
+  ParaArquitetosRoute: typeof ParaArquitetosRoute
+  ParaConstrutorasRoute: typeof ParaConstrutorasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +84,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/casa-e-comercio': {
+      id: '/casa-e-comercio'
+      path: '/casa-e-comercio'
+      fullPath: '/casa-e-comercio'
+      preLoaderRoute: typeof CasaEComercioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para-arquitetos': {
+      id: '/para-arquitetos'
+      path: '/para-arquitetos'
+      fullPath: '/para-arquitetos'
+      preLoaderRoute: typeof ParaArquitetosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para-construtoras': {
+      id: '/para-construtoras'
+      path: '/para-construtoras'
+      fullPath: '/para-construtoras'
+      preLoaderRoute: typeof ParaConstrutorasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CasaEComercioRoute: CasaEComercioRoute,
+  ParaArquitetosRoute: ParaArquitetosRoute,
+  ParaConstrutorasRoute: ParaConstrutorasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

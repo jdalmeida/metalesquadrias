@@ -1,26 +1,25 @@
 import { ServiceCard } from "#/components/services/ServiceCard";
-import { SERVICE_ORDER, SERVICES } from "#/lib/services";
+import { SERVICES, type ServiceId } from "#/lib/services";
 
-export function Services() {
+export function AudienceServices({
+	order,
+	placement,
+}: {
+	order: ServiceId[];
+	placement: string;
+}) {
 	return (
-		<section
-			id="servicos"
-			className="border-b border-border-subtle bg-background"
-		>
+		<section id="servicos" className="bg-background">
 			<div className="page-wrap py-16 md:py-20">
 				<h2 className="font-heading text-2xl font-bold text-strong md:text-3xl">
 					Serviços
 				</h2>
-				<p className="mt-2 max-w-lg text-foreground">
-					Peça de ferro sob medida, fabricada e instalada pela nossa equipe.
-				</p>
 				<div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{SERVICE_ORDER.map((id, index) => (
+					{order.map((id) => (
 						<ServiceCard
 							key={id}
 							service={SERVICES[id]}
-							featured={index === 0}
-							placement="services"
+							placement={placement}
 						/>
 					))}
 				</div>

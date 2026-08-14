@@ -46,6 +46,16 @@ export const Route = createRootRoute({
 		],
 		scripts: [
 			{
+				src: "https://www.googletagmanager.com/gtag/js?id=G-FGKVHYM2KT",
+				async: true,
+			},
+			{
+				children: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FGKVHYM2KT');`,
+			},
+			{
 				type: "application/ld+json",
 				children: JSON.stringify(LOCAL_BUSINESS_SCHEMA),
 			},
