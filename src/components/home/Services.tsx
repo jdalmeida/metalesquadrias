@@ -1,3 +1,4 @@
+import { usePostHog } from "@posthog/react";
 import type { LucideIcon } from "lucide-react";
 import {
 	DoorClosed,
@@ -71,6 +72,7 @@ const SERVICES: Service[] = [
 ];
 
 function ServiceCard({ service }: { service: Service }) {
+	const posthog = usePostHog();
 	const Icon = service.icon;
 	return (
 		<div
@@ -99,6 +101,12 @@ function ServiceCard({ service }: { service: Service }) {
 				</p>
 				<a
 					href={whatsappHref(service.message)}
+					onClick={() =>
+						posthog.capture("whatsapp_quote_requested", {
+							placement: "services",
+							service: service.name,
+						})
+					}
 					target="_blank"
 					rel="noreferrer"
 					className="mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary hover:text-primary-hover"

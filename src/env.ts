@@ -14,6 +14,8 @@ export const env = createEnv({
 
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
+    VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: z.string().min(1).optional(),
+    VITE_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
   },
 
   /**

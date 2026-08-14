@@ -1,3 +1,4 @@
+import { usePostHog } from "@posthog/react";
 import { MessageCircle } from "lucide-react";
 import { NAP, WHATSAPP_MESSAGES, whatsappHref } from "#/lib/site";
 
@@ -9,6 +10,8 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
+	const posthog = usePostHog();
+
 	return (
 		<header className="sticky top-0 z-50 border-b border-border-subtle bg-background/90 backdrop-blur">
 			<div className="page-wrap flex h-[var(--header-h)] items-center justify-between gap-3 sm:gap-6">
@@ -33,12 +36,22 @@ export function Header() {
 				<div className="flex items-center gap-4">
 					<a
 						href={NAP.phoneHref}
+						onClick={() =>
+							posthog.capture("phone_contact_selected", {
+								placement: "header",
+							})
+						}
 						className="hidden text-sm font-medium text-foreground lg:inline"
 					>
 						{NAP.phoneDisplay}
 					</a>
 					<a
 						href={whatsappHref(WHATSAPP_MESSAGES.home)}
+						onClick={() =>
+							posthog.capture("whatsapp_quote_requested", {
+								placement: "header",
+							})
+						}
 						target="_blank"
 						rel="noreferrer"
 						className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover sm:px-4"

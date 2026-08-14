@@ -1,3 +1,4 @@
+import { usePostHog } from "@posthog/react";
 import { Building2, HardHat, Wrench } from "lucide-react";
 
 const AUDIENCES = [
@@ -7,6 +8,8 @@ const AUDIENCES = [
 ];
 
 export function AudiencePicker() {
+	const posthog = usePostHog();
+
 	return (
 		<section className="bg-dark">
 			<div className="page-wrap py-14 md:py-16">
@@ -22,6 +25,7 @@ export function AudiencePicker() {
 						<a
 							key={label}
 							href="#servicos"
+							onClick={() => posthog.capture("audience_selected", { audience: label })}
 							className="group flex items-center gap-3 rounded-lg border border-border-on-dark bg-dark-2 p-5 transition-colors hover:border-primary"
 						>
 							<Icon className="size-5 shrink-0 text-primary" />

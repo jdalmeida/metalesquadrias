@@ -1,7 +1,10 @@
+import { usePostHog } from "@posthog/react";
 import { Instagram } from "lucide-react";
 import { NAP } from "#/lib/site";
 
 export function Footer() {
+	const posthog = usePostHog();
+
 	return (
 		<footer className="bg-dark-2">
 			<div className="page-wrap grid gap-10 py-14 md:grid-cols-[1.2fr_1fr_1fr]">
@@ -17,6 +20,7 @@ export function Footer() {
 					</p>
 					<a
 						href={NAP.instagramHref}
+						onClick={() => posthog.capture("instagram_profile_opened")}
 						target="_blank"
 						rel="noreferrer"
 						className="mt-4 inline-flex items-center gap-2 text-sm text-on-dark hover:text-primary"
@@ -40,7 +44,15 @@ export function Footer() {
 				<div>
 					<h3 className="text-sm font-semibold text-on-dark">Contato</h3>
 					<p className="mt-3 text-sm text-on-dark-muted">
-						<a href={NAP.phoneHref} className="text-on-dark-muted hover:text-primary">
+						<a
+							href={NAP.phoneHref}
+							onClick={() =>
+								posthog.capture("phone_contact_selected", {
+									placement: "footer",
+								})
+							}
+							className="text-on-dark-muted hover:text-primary"
+						>
 							{NAP.phoneDisplay}
 						</a>
 						<br />

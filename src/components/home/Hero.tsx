@@ -1,7 +1,10 @@
+import { usePostHog } from "@posthog/react";
 import { MessageCircle } from "lucide-react";
 import { WHATSAPP_MESSAGES, whatsappHref } from "#/lib/site";
 
 export function Hero() {
+	const posthog = usePostHog();
+
 	return (
 		<section id="top" className="border-b border-border-subtle bg-background">
 			<div className="page-wrap grid gap-10 py-14 md:grid-cols-2 md:items-center md:py-20">
@@ -23,6 +26,11 @@ export function Hero() {
 					<div className="mt-8 flex flex-wrap gap-3">
 						<a
 							href={whatsappHref(WHATSAPP_MESSAGES.home)}
+							onClick={() =>
+								posthog.capture("whatsapp_quote_requested", {
+									placement: "hero",
+								})
+							}
 							target="_blank"
 							rel="noreferrer"
 							className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
