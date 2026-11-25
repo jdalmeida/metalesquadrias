@@ -2,31 +2,26 @@ import { usePostHog } from "@posthog/react";
 import { MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+	CHAPAS,
 	type Chapa,
 	CORES,
 	type Cor,
 	type CortinaConfig,
 	mensagemCortina,
-	NUM_FAIXAS,
 	outraCor,
-	PADROES,
 } from "#/lib/cortina";
 import { whatsappHref } from "#/lib/site";
 
-const CHAPA_LABEL: Record<Chapa, string> = {
-	lisa: "Lisa",
-	transvision: "Transvision",
-};
-
-const CHAPA_STYLE: Record<Chapa, React.CSSProperties> = {
-	lisa: {
-		background:
-			"repeating-linear-gradient(180deg, var(--iron-200) 0 7px, var(--iron-300) 7px 9px)",
-	},
-	transvision: {
-		background:
-			"repeating-linear-gradient(180deg, var(--iron-300) 0 3px, transparent 3px 9px), var(--paper)",
-	},
+// Amostra de cada opção: listras finas como as lâminas
+const LISA = "var(--iron-300) 0 6px, var(--iron-500) 6px 7px";
+const VAZADA =
+	"var(--iron-400) 0 2px, var(--paper) 2px 6px, var(--iron-500) 6px 7px";
+const AMOSTRA: Record<Chapa, string> = {
+	lisa: `repeating-linear-gradient(180deg, ${LISA})`,
+	transvision: `repeating-linear-gradient(180deg, ${VAZADA})`,
+	intercalada:
+		"repeating-linear-gradient(180deg, var(--iron-300) 0 6px, var(--iron-500) 6px 7px, var(--iron-400) 7px 9px, var(--paper) 9px 13px, var(--iron-500) 13px 14px)",
+	personalizado: `repeating-linear-gradient(180deg, ${VAZADA}) top / 100% 55% no-repeat, repeating-linear-gradient(180deg, ${LISA})`,
 };
 
 /** Prévia 3D: só baixa o three.js quando a seção chega perto da tela. */
@@ -115,10 +110,10 @@ function Toggle({
 export function CortinaSimulator() {
 	const posthog = usePostHog();
 	const [medidas, setMedidas] = useState({ largura: "3", altura: "3" });
-	const [faixas, setFaixas] = useState<Chapa[]>(PADROES[2].faixas);
+	const [chapa, setChapa] = useState<Chapa>("intercalada");
 	const [nobreak, setNobreak] = useState(false);
 	const [caixa, setCaixa] = useState(true);
-	const [cor, setCor] = useState<Cor>(CORES[1]);
+	const [cor, setCor] = useState<Cor>(CORES[2]); // Cinza
 	const outra = !CORES.includes(cor);
 
 	const largura = parseMetros(medidas.largura);
@@ -130,14 +125,9 @@ export function CortinaSimulator() {
 	if (valido) ultima.current = { largura, altura };
 	const { largura: l3d, altura: a3d } = ultima.current;
 	const config = useMemo<CortinaConfig>(
-		() => ({ largura: l3d, altura: a3d, faixas, nobreak, caixa, cor }),
-		[l3d, a3d, faixas, nobreak, caixa, cor],
+		() => ({ largura: l3d, altura: a3d, chapa, nobreak, caixa, cor }),
+		[l3d, a3d, chapa, nobreak, caixa, cor],
 	);
-
-	const alternar = (i: number) =>
-		setFaixas((f) =>
-			f.map((c, j) => (j === i ? (c === "lisa" ? "transvision" : "lisa") : c)),
-		);
 
 	return (
 		<section
@@ -200,40 +190,30 @@ export function CortinaSimulator() {
 							<legend className="text-sm font-medium text-strong">
 								Chapas da porta
 							</legend>
-							<div className="mt-2 grid grid-cols-2 gap-3">
-								<div className="flex flex-col-reverse overflow-hidden rounded-md border-2 border-[var(--iron-600)]">
-									{faixas.map((chapa, i) => (
-										<button
-											// biome-ignore lint/suspicious/noArrayIndexKey: faixas têm posição fixa
-											key={i}
-											type="button"
-											onClick={() => alternar(i)}
-											style={CHAPA_STYLE[chapa]}
-											aria-label={`Faixa ${i + 1} de ${NUM_FAIXAS} (de baixo para cima): ${CHAPA_LABEL[chapa]}. Toque para trocar.`}
-											className="h-10 border-t border-[var(--iron-400)] text-xs font-semibold text-strong first:border-t-0 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
-										>
-											<span className="rounded-sm bg-card/85 px-1.5 py-0.5">
-												{CHAPA_LABEL[chapa]}
+							<div className="mt-2 grid grid-cols-2 gap-2">
+								{CHAPAS.map((c) => (
+									<button
+										key={c.id}
+										type="button"
+										onClick={() => setChapa(c.id)}
+										aria-pressed={chapa === c.id}
+										className="flex min-h-16 items-center gap-3 rounded-md border border-border-default bg-card p-2 text-left hover:border-border-strong aria-pressed:border-primary aria-pressed:ring-1 aria-pressed:ring-primary"
+									>
+										<span
+											aria-hidden
+											className="h-12 w-9 shrink-0 rounded-sm border border-[var(--iron-500)]"
+											style={{ background: AMOSTRA[c.id] }}
+										/>
+										<span className="flex flex-col">
+											<span className="text-sm font-semibold text-strong">
+												{c.nome}
 											</span>
-										</button>
-									))}
-								</div>
-								<div className="flex flex-col gap-2">
-									<p className="text-xs text-muted-foreground">
-										Toque numa faixa para trocar, ou use um padrão:
-									</p>
-									{PADROES.map((p) => (
-										<button
-											key={p.label}
-											type="button"
-											onClick={() => setFaixas(p.faixas)}
-											aria-pressed={p.faixas.join() === faixas.join()}
-											className="min-h-11 rounded-md border border-border-default bg-card px-3 py-2 text-left text-sm leading-tight text-strong hover:border-border-strong aria-pressed:border-primary aria-pressed:text-primary"
-										>
-											{p.label}
-										</button>
-									))}
-								</div>
+											<span className="text-xs leading-tight text-muted-foreground">
+												{c.descricao}
+											</span>
+										</span>
+									</button>
+								))}
 							</div>
 						</fieldset>
 
@@ -308,7 +288,6 @@ export function CortinaSimulator() {
 								posthog.capture("whatsapp_quote_requested", {
 									placement: "simulador_cortina",
 									...config,
-									faixas: faixas.join(","),
 									cor: cor.nome,
 								})
 							}

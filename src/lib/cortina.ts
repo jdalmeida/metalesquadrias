@@ -1,9 +1,31 @@
-export type Chapa = "lisa" | "transvision";
+export type Chapa = "lisa" | "intercalada" | "transvision" | "personalizado";
+
+export const CHAPAS: { id: Chapa; nome: string; descricao: string }[] = [
+	{ id: "lisa", nome: "Lisa", descricao: "Fechada, sem visão para dentro" },
+	{
+		id: "intercalada",
+		nome: "Intercalada",
+		descricao: "Uma lâmina lisa, uma transvision",
+	},
+	{ id: "transvision", nome: "Transvision", descricao: "Toda vazada" },
+	{
+		id: "personalizado",
+		nome: "Personalizado",
+		descricao: "Você explica o padrão no WhatsApp",
+	},
+];
+
+const MSG_CHAPA: Record<Chapa, string> = {
+	lisa: "lisa",
+	intercalada: "intercalada (uma lâmina lisa, uma transvision)",
+	transvision: "transvision",
+	personalizado: "personalizado (explico o padrão por aqui)",
+};
 
 export type CortinaConfig = {
 	largura: number;
 	altura: number;
-	faixas: Chapa[]; // de baixo para cima
+	chapa: Chapa;
 	nobreak: boolean;
 	caixa: boolean;
 	cor: Cor;
@@ -28,45 +50,13 @@ export const outraCor = (hex: string): Cor => ({
 	hex,
 });
 
-// ponytail: altura dividida em faixas iguais; faixa de altura livre só se a fábrica pedir
-export const NUM_FAIXAS = 8;
-
-export const PADROES: { label: string; faixas: Chapa[] }[] = [
-	{ label: "Toda lisa", faixas: Array(NUM_FAIXAS).fill("lisa") },
-	{ label: "Toda transvision", faixas: Array(NUM_FAIXAS).fill("transvision") },
-	{
-		label: "Lisa embaixo, transvision em cima",
-		faixas: [...Array(3).fill("lisa"), ...Array(5).fill("transvision")],
-	},
-	{
-		label: "Alternada",
-		faixas: Array.from({ length: NUM_FAIXAS }, (_, i) =>
-			i % 2 ? "transvision" : "lisa",
-		),
-	},
-];
-
-/** "1–3 lisa, 4–8 transvision" (faixas numeradas de baixo para cima) */
-export function descreverFaixas(faixas: Chapa[]) {
-	const partes: string[] = [];
-	let inicio = 0;
-	for (let i = 1; i <= faixas.length; i++) {
-		if (i === faixas.length || faixas[i] !== faixas[inicio]) {
-			const faixa = inicio + 1 === i ? `${i}` : `${inicio + 1}–${i}`;
-			partes.push(`${faixa} ${faixas[inicio]}`);
-			inicio = i;
-		}
-	}
-	return partes.join(", ");
-}
-
 const metros = (n: number) => `${n.toFixed(2).replace(".", ",")} m`;
 
 export function mensagemCortina(c: CortinaConfig) {
 	return [
 		"Olá, vim pelo simulador de cortina de ferro do site e quero pedir um orçamento.",
 		`Medida aproximada: ${metros(c.largura)} de largura × ${metros(c.altura)} de altura`,
-		`Chapas (${NUM_FAIXAS} faixas, de baixo para cima): ${descreverFaixas(c.faixas)}`,
+		`Chapas: ${MSG_CHAPA[c.chapa]}`,
 		`Motor com nobreak: ${c.nobreak ? "sim" : "não"}`,
 		`Caixa de acabamento: ${c.caixa ? "sim" : "não"}`,
 		`Cor: ${c.cor.nome}`,

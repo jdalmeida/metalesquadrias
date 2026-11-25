@@ -2,10 +2,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { type CortinaConfig, NUM_FAIXAS } from "./cortina";
+import type { CortinaConfig } from "./cortina";
 
-// ponytail: medidas ilustrativas (não é especificação de chapa); ajustar aqui se a fábrica passar as reais
-const LAMINA_ALTURA = 0.075; // altura visível de uma lâmina
+const LAMINA_ALTURA = 0.07; // altura visível de uma lâmina (confirmado pela fábrica)
+// ponytail: medidas abaixo são ilustrativas; ajustar se a fábrica passar as reais
 const TILE_LARGURA = 0.15; // largura coberta por um tile da textura
 const TRANSV_OPACIDADE = 0.72; // a chapa transvision fica levemente translúcida
 const LOJA_PROFUNDIDADE = 4.2;
@@ -18,49 +18,55 @@ const LUZ = {
 	lojaPontos: 40, // lâmpadas da loja (candela); também aquecem a calçada, como luz saindo da vitrine
 };
 
-// Uma lâmina (256×128 px = 0,15 × 0,075 m): perfil com friso, grain de galvanizado
-// e, na transvision, furos oblongos finos.
-function laminaTexture(furos: boolean) {
+// Lâminas empilhadas (cada uma 256×128 px = 0,15 × 0,07 m), de cima para baixo:
+// perfil com friso, grain de galvanizado e, nas transvision, furos oblongos finos.
+function laminaTexture(furos: boolean[]) {
 	const w = 256;
-	const h = 128;
+	const L = 128;
+	const h = L * furos.length;
 	const c = document.createElement("canvas");
 	c.width = w;
 	c.height = h;
 	const ctx = c.getContext("2d") as CanvasRenderingContext2D;
-	const g = ctx.createLinearGradient(0, 0, 0, h);
-	g.addColorStop(0, "#c6ccd1");
-	g.addColorStop(0.08, "#eef1f3");
-	g.addColorStop(0.45, "#bfc5cb");
-	g.addColorStop(0.8, "#8e959c");
-	g.addColorStop(0.83, "#3a4047");
-	g.addColorStop(0.92, "#4f565e");
-	g.addColorStop(1, "#7d848b");
-	ctx.fillStyle = g;
-	ctx.fillRect(0, 0, w, h);
+	furos.forEach((_, k) => {
+		const y0 = k * L;
+		const g = ctx.createLinearGradient(0, y0, 0, y0 + L);
+		g.addColorStop(0, "#c6ccd1");
+		g.addColorStop(0.08, "#eef1f3");
+		g.addColorStop(0.45, "#bfc5cb");
+		g.addColorStop(0.8, "#8e959c");
+		g.addColorStop(0.83, "#3a4047");
+		g.addColorStop(0.92, "#4f565e");
+		g.addColorStop(1, "#7d848b");
+		ctx.fillStyle = g;
+		ctx.fillRect(0, y0, w, L);
+	});
 
 	const img = ctx.getImageData(0, 0, w, h);
 	const d = img.data;
 	for (let y = 0; y < h; y++) {
 		const risco = (Math.random() - 0.5) * 8; // escovado horizontal
+		const alpha = furos[Math.floor(y / L)] ? 255 * TRANSV_OPACIDADE : 255;
 		for (let x = 0; x < w; x++) {
 			const i = (y * w + x) * 4;
 			const n = risco + (Math.random() - 0.5) * 14;
 			d[i] += n;
 			d[i + 1] += n;
 			d[i + 2] += n;
-			d[i + 3] = furos ? 255 * TRANSV_OPACIDADE : 255;
+			d[i + 3] = alpha;
 		}
 	}
 	ctx.putImageData(img, 0, 0);
 
-	if (furos) {
-		ctx.globalCompositeOperation = "destination-out";
-		for (let k = 0; k < 3; k++) {
+	ctx.globalCompositeOperation = "destination-out";
+	furos.forEach((f, k) => {
+		if (!f) return;
+		for (let n = 0; n < 3; n++) {
 			ctx.beginPath();
-			ctx.roundRect(8 + k * 85, 36, 70, 16, 8);
+			ctx.roundRect(8 + n * 85, k * L + 36, 70, 16, 8);
 			ctx.fill();
 		}
-	}
+	});
 
 	const t = new THREE.CanvasTexture(c);
 	t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -110,8 +116,9 @@ export function createCortinaScene(host: HTMLElement) {
 	// Só arrasto horizontal gira; arrasto vertical continua rolando a página no celular
 	renderer.domElement.style.touchAction = "pan-y";
 
-	const texLisa = laminaTexture(false);
-	const texTransv = laminaTexture(true);
+	const texLisa = laminaTexture([false]);
+	const texTransv = laminaTexture([true]);
+	const texInter = laminaTexture([false, true]);
 	const texRolo = texLisa.clone(); // mesma lâmina, repetição própria (enrolada no tubo)
 	texRolo.needsUpdate = true;
 	const metal = { metalness: 0.25, roughness: 0.5 }; // pintura eletrostática
@@ -125,6 +132,13 @@ export function createCortinaScene(host: HTMLElement) {
 		transvision: new THREE.MeshStandardMaterial({
 			...metal,
 			map: texTransv,
+			transparent: true,
+			alphaTest: 0.02,
+			side: THREE.DoubleSide,
+		}),
+		intercalada: new THREE.MeshStandardMaterial({
+			...metal,
+			map: texInter,
 			transparent: true,
 			alphaTest: 0.02,
 			side: THREE.DoubleSide,
@@ -330,10 +344,6 @@ export function createCortinaScene(host: HTMLElement) {
 		door = new THREE.Group();
 		scene.add(door);
 
-		const faixaH = H / NUM_FAIXAS;
-		const laminas = Math.max(1, Math.round(faixaH / LAMINA_ALTURA));
-		for (const t of [texLisa, texTransv])
-			t.repeat.set(W / TILE_LARGURA, laminas);
 		texRolo.repeat.set(
 			W / TILE_LARGURA,
 			Math.round((2 * Math.PI * 0.2) / LAMINA_ALTURA),
@@ -345,6 +355,7 @@ export function createCortinaScene(host: HTMLElement) {
 		for (const m of [
 			mats.lisa,
 			mats.transvision,
+			mats.intercalada,
 			mats.rolo,
 			mats.perfil,
 			mats.caixa,
@@ -375,16 +386,30 @@ export function createCortinaScene(host: HTMLElement) {
 		calcada.rotation.x = -Math.PI / 2;
 		loja();
 
-		// Faixas de chapa, de baixo para cima
-		c.faixas.forEach((chapa, i) => {
-			add(
-				new THREE.PlaneGeometry(W, faixaH),
-				mats[chapa],
-				0,
-				faixaH * (i + 0.5),
-				0,
-			);
-		});
+		// Chapa: a UV é escalada pelo tamanho real, então a lâmina fica com 7 cm em qualquer medida
+		const chapa = (
+			h: number,
+			y: number,
+			mat: THREE.Material,
+			laminasPorTile = 1,
+		) => {
+			const geo = new THREE.PlaneGeometry(W, h);
+			const uv = geo.attributes.uv;
+			for (let i = 0; i < uv.count; i++)
+				uv.setXY(
+					i,
+					(uv.getX(i) * W) / TILE_LARGURA,
+					(uv.getY(i) * h) / (LAMINA_ALTURA * laminasPorTile),
+				);
+			add(geo, mat, 0, y, 0);
+		};
+		if (c.chapa === "intercalada") chapa(H, H / 2, mats.intercalada, 2);
+		else if (c.chapa === "personalizado") {
+			// Só ilustra uma combinação; o padrão real o cliente explica no WhatsApp
+			const hl = Math.round((H * 0.4) / LAMINA_ALTURA) * LAMINA_ALTURA;
+			chapa(hl, hl / 2, mats.lisa);
+			chapa(H - hl, hl + (H - hl) / 2, mats.transvision);
+		} else chapa(H, H / 2, mats[c.chapa]);
 		box(W, 0.06, 0.06, mats.perfil, 0, 0.03, 0.01); // soleira
 		for (const s of [-1, 1])
 			box(0.07, H, 0.1, mats.perfil, s * (W / 2 + 0.02), H / 2, 0); // trilhos
@@ -430,6 +455,7 @@ export function createCortinaScene(host: HTMLElement) {
 			for (const m of Object.values(mats).flat()) m.dispose();
 			texLisa.dispose();
 			texTransv.dispose();
+			texInter.dispose();
 			texRolo.dispose();
 			scene.environment?.dispose();
 			pmrem.dispose();
