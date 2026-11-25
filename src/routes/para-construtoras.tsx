@@ -3,6 +3,7 @@ import { AudienceHero } from "#/components/audience/AudienceHero";
 import { AudienceServices } from "#/components/audience/AudienceServices";
 import { FinalCta } from "#/components/home/FinalCta";
 import { Footer } from "#/components/home/Footer";
+import { Gallery } from "#/components/home/Gallery";
 import { Header } from "#/components/home/Header";
 import { WHATSAPP_MESSAGES } from "#/lib/site";
 
@@ -18,6 +19,36 @@ const SERVICE_ORDER = [
 	"portoes",
 	"cortinas",
 ] as const;
+
+const PHOTOS = [
+	{
+		src: "/assets/estrutura-pavilhao.jpg",
+		caption: "Estrutura metálica de pavilhão",
+	},
+	{
+		src: "/assets/escada-industrial.jpg",
+		caption: "Escada e mezanino em pavilhão",
+	},
+	{ src: "/assets/escada-externa-preta.jpg", caption: "Escada metálica" },
+	{ src: "/assets/portao-pavilhao.jpg", caption: "Portão de pavilhão" },
+	{
+		src: "/assets/portoes-pavilhao.jpg",
+		caption: "Portões em pavilhão industrial",
+	},
+	{
+		src: "/assets/cortinas-pavilhao.jpg",
+		caption: "Cortinas de ferro em pavilhão",
+	},
+	{
+		src: "/assets/cortina-pavilhao.jpg",
+		caption: "Cortina de ferro em pavilhão",
+	},
+	{
+		src: "/assets/transvision-pavilhao.jpg",
+		caption: "Transvision em pavilhão",
+	},
+	{ src: "/assets/marquise.jpg", caption: "Marquise metálica" },
+];
 
 export const Route = createFileRoute("/para-construtoras")({
 	head: () => ({
@@ -44,13 +75,14 @@ function ParaConstrutoras() {
 					ctaLabel="Enviar projeto para orçamento"
 					whatsappMessage={WHATSAPP_MESSAGES.paraConstrutoras}
 					placement="hero_construtoras"
-					photo="/assets/escada1.jpg"
-					photoAlt="Escada de ferro fabricada para obra"
+					photo="/assets/estrutura-pavilhao.jpg"
+					photoAlt="Estrutura metálica de pavilhão"
 				/>
 				<AudienceServices
 					order={[...SERVICE_ORDER]}
 					placement="services_construtoras"
 				/>
+				<Gallery photos={PHOTOS} />
 				<FinalCta
 					message={WHATSAPP_MESSAGES.paraConstrutoras}
 					placement="final_cta_construtoras"

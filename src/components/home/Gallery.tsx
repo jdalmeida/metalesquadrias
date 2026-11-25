@@ -1,4 +1,6 @@
-const PHOTOS = [
+export type GalleryPhoto = { src: string; caption: string };
+
+const PHOTOS: GalleryPhoto[] = [
 	{ src: "/assets/cortina4.jpg", caption: "Cortina de ferro automatizada" },
 	{
 		src: "/assets/transvizion_externa.jpg",
@@ -14,9 +16,21 @@ const PHOTOS = [
 	{ src: "/assets/grade_residencial.jpg", caption: "Grade residencial" },
 	{ src: "/assets/grade_janela.jpg", caption: "Grade de janela" },
 	{ src: "/assets/grade_condomínio.jpg", caption: "Grade — condomínio" },
+	{ src: "/assets/sacada.jpg", caption: "Guarda-corpo de sacada" },
+	{ src: "/assets/portao-garagem.jpg", caption: "Portão de garagem" },
+	{ src: "/assets/portao-social.jpg", caption: "Portão social" },
+	{
+		src: "/assets/cobertura-garagem.jpg",
+		caption: "Cobertura metálica de garagem",
+	},
+	{ src: "/assets/cobertura-curva.jpg", caption: "Cobertura curva" },
+	{
+		src: "/assets/escada-metalica-preta.jpg",
+		caption: "Escada metálica com guarda-corpo",
+	},
 ];
 
-export function Gallery() {
+export function Gallery({ photos = PHOTOS }: { photos?: GalleryPhoto[] }) {
 	return (
 		<section
 			id="trabalhos"
@@ -30,7 +44,7 @@ export function Gallery() {
 					Fotos de peças executadas pela nossa equipe.
 				</p>
 				<div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-3">
-					{PHOTOS.map((photo) => (
+					{photos.map((photo) => (
 						<figure
 							key={photo.src}
 							className="overflow-hidden rounded-lg border border-border-default"

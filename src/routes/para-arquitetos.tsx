@@ -3,6 +3,7 @@ import { AudienceHero } from "#/components/audience/AudienceHero";
 import { AudienceServices } from "#/components/audience/AudienceServices";
 import { FinalCta } from "#/components/home/FinalCta";
 import { Footer } from "#/components/home/Footer";
+import { Gallery } from "#/components/home/Gallery";
 import { Header } from "#/components/home/Header";
 import { WHATSAPP_MESSAGES } from "#/lib/site";
 
@@ -17,6 +18,27 @@ const SERVICE_ORDER = [
 	"portoes",
 	"cortinas",
 ] as const;
+
+const PHOTOS = [
+	{
+		src: "/assets/escada-metalica-preta.jpg",
+		caption: "Escada metálica com guarda-corpo",
+	},
+	{
+		src: "/assets/escada-guarda-corpo.jpg",
+		caption: "Escada com guarda-corpo",
+	},
+	{ src: "/assets/guarda-corpo-rampa.jpg", caption: "Guarda-corpo de rampa" },
+	{ src: "/assets/sacada.jpg", caption: "Guarda-corpo de sacada" },
+	{
+		src: "/assets/grade-janela-detalhe.jpg",
+		caption: "Grade de janela — detalhe do ornamento",
+	},
+	{ src: "/assets/gradil-portao.jpg", caption: "Gradil e portão residencial" },
+	{ src: "/assets/cobertura-patio.jpg", caption: "Cobertura metálica" },
+	{ src: "/assets/cobertura-curva.jpg", caption: "Cobertura curva" },
+	{ src: "/assets/transvision-loja.jpg", caption: "Transvision em loja" },
+];
 
 export const Route = createFileRoute("/para-arquitetos")({
 	head: () => ({
@@ -43,13 +65,14 @@ function ParaArquitetos() {
 					ctaLabel="Enviar meu projeto no WhatsApp"
 					whatsappMessage={WHATSAPP_MESSAGES.paraArquitetos}
 					placement="hero_arquitetos"
-					photo="/assets/guarda_corpo.jpg"
-					photoAlt="Guarda-corpo de ferro fabricado sob medida"
+					photo="/assets/escada-metalica-preta.jpg"
+					photoAlt="Escada metálica com guarda-corpo fabricada sob medida"
 				/>
 				<AudienceServices
 					order={[...SERVICE_ORDER]}
 					placement="services_arquitetos"
 				/>
+				<Gallery photos={PHOTOS} />
 				<FinalCta
 					message={WHATSAPP_MESSAGES.paraArquitetos}
 					placement="final_cta_arquitetos"
