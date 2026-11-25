@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { About } from "#/components/home/About";
 import { AudiencePicker } from "#/components/home/AudiencePicker";
+import { CortinaSimulator } from "#/components/home/CortinaSimulator";
 import { Faq } from "#/components/home/Faq";
 import { FinalCta } from "#/components/home/FinalCta";
 import { Footer } from "#/components/home/Footer";
@@ -37,6 +38,7 @@ function Home() {
 				<TrustBar />
 				<AudiencePicker />
 				<Services />
+				<CortinaSimulator />
 				<HowItWorks />
 				<Gallery />
 				<About />
