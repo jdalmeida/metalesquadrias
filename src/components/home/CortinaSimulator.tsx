@@ -1,5 +1,5 @@
 import { usePostHog } from "@posthog/react";
-import { MessageCircle } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
 	CHAPAS,
@@ -10,6 +10,7 @@ import {
 	mensagemCortina,
 	outraCor,
 } from "#/lib/cortina";
+import type { CortinaSceneHandle } from "#/lib/cortina-3d";
 import { whatsappHref } from "#/lib/site";
 
 // Amostra de cada opção: listras finas como as lâminas
@@ -27,8 +28,9 @@ const AMOSTRA: Record<Chapa, string> = {
 /** Prévia 3D: só baixa o three.js quando a seção chega perto da tela. */
 function CortinaPreview({ config }: { config: CortinaConfig }) {
 	const host = useRef<HTMLDivElement>(null);
-	const scene = useRef<{ update(c: CortinaConfig): void } | null>(null);
+	const scene = useRef<CortinaSceneHandle | null>(null);
 	const [status, setStatus] = useState<"idle" | "ready" | "error">("idle");
+	const [aberta, setAberta] = useState(false);
 
 	useEffect(() => {
 		const el = host.current;
@@ -64,13 +66,44 @@ function CortinaPreview({ config }: { config: CortinaConfig }) {
 		if (status === "ready") scene.current?.update(config);
 	}, [status, config]);
 
+	useEffect(() => {
+		if (status === "ready") scene.current?.setOpen(aberta);
+	}, [status, aberta]);
+
+	const medidaLabel = `${config.largura.toFixed(2).replace(".", ",")} × ${config.altura.toFixed(2).replace(".", ",")} m`;
+
 	return (
-		<div
-			ref={host}
-			className="relative h-full w-full overflow-hidden rounded-lg border border-border-default bg-gradient-to-b from-[var(--iron-050)] to-[var(--paper-dim)]"
-		>
+		<div className="relative h-full w-full overflow-hidden rounded-lg border border-border-default bg-gradient-to-b from-[#1f2835] to-[#343d49] shadow-sm">
+			<div ref={host} className="h-full w-full" />
+
+			{status === "ready" && (
+				<>
+					<span className="pointer-events-none absolute top-2.5 left-2.5 rounded-md border border-white/15 bg-[#121417]/70 px-2.5 py-1 font-mono text-xs text-white/90 backdrop-blur-sm">
+						{medidaLabel}
+					</span>
+					<button
+						type="button"
+						onClick={() => setAberta((v) => !v)}
+						aria-pressed={aberta}
+						className="absolute right-2.5 bottom-2.5 inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-[#121417]/75 px-3 py-1.5 text-xs font-medium text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-[#121417]/90"
+					>
+						{aberta ? (
+							<>
+								<ChevronDown className="size-3.5" />
+								Fechar porta
+							</>
+						) : (
+							<>
+								<ChevronUp className="size-3.5" />
+								Abrir porta
+							</>
+						)}
+					</button>
+				</>
+			)}
+
 			{status !== "ready" && (
-				<p className="absolute inset-0 grid place-items-center p-4 text-center text-sm text-muted-foreground">
+				<p className="absolute inset-0 grid place-items-center p-4 text-center text-sm text-white/75">
 					{status === "error"
 						? "Prévia 3D indisponível neste aparelho. A configuração continua valendo."
 						: "Carregando prévia 3D…"}
